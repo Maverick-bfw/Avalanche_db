@@ -9,13 +9,13 @@ import tkFileDialog as tkFD
 
 
 
-def overview_csv_html(root, single_html, outfile_html, outfile_csv):
+def make_link_list(root, single_html):
     pattern = '*.lawinfo' # seek .lawinfo files in the folders
     myFileList = []
     for path, subdirs, files in os.walk(root): # find the .lawinfo files and add them to myFileList
         for fName in files:
             if fnmatch(fName, pattern):
-                myFileList.append(os.path.join(path,fName))
+                myFileList.append(os.path.join(path, fName))
 
 
     myLinkList = []
@@ -27,7 +27,9 @@ def overview_csv_html(root, single_html, outfile_html, outfile_csv):
         myLinkList.append(item)
 
     print "I found ", len(myLinkList), "files"
+    return myFileList, myLinkList
 
+def overview_csv_html(root, single_html, outfile_html, outfile_csv, myFileList, myLinkList):
     myDicList = []
     for file in myFileList:
         myDict = {}
@@ -193,10 +195,10 @@ def overview_csv_html(root, single_html, outfile_html, outfile_csv):
 
 ############ only useful to run stand alone not used with make_avalanche_db.py########################
 if __name__ == "__main__":
-    
-    overview_html =       '/home/damboise/Documents/data_base/html/overview.html'
-    single_html =  '/home/damboise/Documents/data_base/html/single_avalanche/'
-    overview_csv  =       '/home/damboise/Documents/data_base/html/overview.csv'
+
+    overview_html = '/home/damboise/Documents/data_base/html/overview.html'
+    single_html = '/home/damboise/Documents/data_base/html/single_avalanche/'
+    overview_csv  = '/home/damboise/Documents/data_base/html/overview.csv'
     #avalanche_map_html = '/home/P/Projekte/xxxxx_Lawinendaten/html/Lawinendaten.html'
     avalanche_map_html = '/home/damboise/Documents/data_base/html/test_map.html'
 
@@ -205,8 +207,7 @@ if __name__ == "__main__":
     #root = tkFD.askdirectory() # this should be the folder that contains the folders on individual avalanche data
     root = '/home/damboise/Documents/data_base/test_data'
     print "searching", root
-
-    overview_csv_html(root, single_html, overview_html, overview_csv)
+    myFileList, myLinkList = make_link_list(root, single_html)
+    overview_csv_html(root, single_html, overview_html, overview_csv, myFileList, myLinkList)
   #  event_info.avalanche_event_to_html(root, single_html, overview_csv)
  #   map_html.map_builder(overview_csv, avalanche_map_html)
-
